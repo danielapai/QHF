@@ -497,7 +497,7 @@ for keyparams.ProbeIndex in np.arange(float(NumProbes)):
     keyparams.Depth = probe_coord          # keep for backward compatibility
     keyparams.ProbeCoord = probe_coord     # explicit, in case modules mutate Depth
 
-
+    This_Suitability_Distribution=[] # saving suitability values for only one probe at a time so average suitability can be calculated over all iterations at a specific probe
     for ii in np.arange(N_iter):
         keyparams.runid = ''
         # ---- per-run diagnostics (reset each run) ----
@@ -563,13 +563,14 @@ for keyparams.ProbeIndex in np.arange(float(NumProbes)):
         BondAlbedo_Distribution.append(A_clean)
         GreenHouse_Distribution.append(GW_clean)
         Depth_Distribution.append(D_clean)
-        Suitability_Distribution.append(S_clean)
+        Suitability_Distribution.append(S_clean) # global suitability distribution
+        This_Suitability_Distribution.append(S_clean) # suitability distribution for this probe only
         runid = keyparams.runid
 
     print('Monte Carlo loop completed')
     print('Runid: ' + keyparams.runid)
 
-    This_Suitability = np.mean(Suitability_Distribution)
+    This_Suitability = np.nanmean(This_Suitability_Distribution)
     print('Average Suitability %.2f' % This_Suitability)
 
     Suitability_Plot.append(This_Suitability)
